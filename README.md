@@ -42,6 +42,7 @@ I'm trying to make is that you shouldn't do a release manually.
 * Push new tag to remote, usually GitHub.
 * Publish module to NPM with `npm publish`.
 
+![](docs/releasor.gif)
 
 ## Install
 
