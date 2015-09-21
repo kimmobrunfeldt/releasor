@@ -1,5 +1,7 @@
 # Releasor
 
+[![Build Status](https://travis-ci.org/kimmobrunfeldt/releasor.svg)](https://travis-ci.org/kimmobrunfeldt/releasor)
+
 Command line tool to automate node module releasing to NPM and Git. And of course,
 `releasor` has been released with `releasor`. :stew: :dog2:
 
