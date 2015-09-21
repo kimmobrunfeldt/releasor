@@ -22,7 +22,10 @@ releasor
 ```
 
 And you will get list of commits since last release conveniently to stdout.
+Remember to add release notes to the new GitHub release.
 
+<br>
+<br>
 
 \* [npm version](https://docs.npmjs.com/cli/version) actually automates most of
 the stuff, but releasor gives some more control to the automation. The point

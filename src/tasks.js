@@ -11,7 +11,9 @@ var tasks = {
     gitPush: gitPush,
     gitPushTag: gitPushTag,
     npmPublish: npmPublish,
-    gitBranchName: gitBranchName
+    gitBranchName: gitBranchName,
+    gitCommitMessagesSinceTag: gitCommitMessagesSinceTag,
+    gitLatestTag: gitLatestTag
 };
 
 // Tasks which only change the local environment, use a whitelist instead of
@@ -20,7 +22,9 @@ var localTasks = [
     'bumpVersion',
     'gitAdd',
     'gitCommit',
-    'gitBranchName'
+    'gitBranchName',
+    'gitCommitMessagesSinceTag',
+    'gitLatestTag'
 ];
 
 // Make sure that run is not exeuted when dry-run switch is set.
@@ -98,7 +102,27 @@ function npmPublish() {
 }
 
 function gitBranchName() {
-    return run('git rev-parse --abbrev-ref HEAD');
+    return run('git rev-parse --abbrev-ref HEAD', {silent: true});
+}
+
+function gitCommitMessagesSinceTag(tag) {
+    var command = 'git log --pretty="format:%s" ' + tag + '..HEAD';
+    return utils.run(command, {silent: true})
+    .then(function(stdout) {
+        var lines = stdout.split('\n').map(function(line) {
+            return line.trim();
+        });
+
+        return lines;
+    });
+}
+
+function gitLatestTag() {
+    var command = 'git describe --tags --abbrev=0';
+    return utils.run(command, {silent: true})
+    .then(function(stdout) {
+        return stdout.trim();
+    });
 }
 
 module.exports = getTasks;

@@ -49,7 +49,15 @@ function main() {
     .then(tasks.gitPushTag)  // Takes tag as a parameter
     .then(tasks.npmPublish)
     .then(tasks.gitPush)
-    .then(function success() {
+    .then(tasks.gitLatestTag)
+    .then(function(latestTag) {
+        log('Commits since tag', latestTag + ':');
+        return latestTag;
+    })
+    .then(tasks.commitMessagesSinceTag)  // Takes tag as a parameter
+    .then(function(messagesList) {
+        console.log(formatList(messagesList, '*'));
+
         console.log('');
         log('Release successfully done!');
     })
@@ -58,6 +66,13 @@ function main() {
         console.trace(err);
         process.exit(2);
     });
+}
+
+// formatList(['a', 'b'], '* ') ->
+// * a
+// * b
+function formatList(list, prefix) {
+    return prefix + list.join('\n' + prefix);
 }
 
 main();

@@ -7,9 +7,9 @@ function log(/* arguments */) {
     console.log(CONSOLE_PREFIX, args.join(' '));
 }
 
-function run(command) {
+function run(command, opts) {
     return new Promise(function(resolve, reject) {
-        var exec = shell.exec(command);
+        var exec = shell.exec(command, opts);
         var success = exec.code === 0;
 
         if (success) {
