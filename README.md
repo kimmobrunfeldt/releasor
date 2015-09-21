@@ -32,12 +32,6 @@ the stuff, but releasor gives some more control to the automation. The point
 I'm trying to make is that you shouldn't do a release manually.
 
 
-## Install
-
-```
-npm install -g releasor
-```
-
 ## What it does
 
 * Check that branch is `master` Can be disabled with `--no-verify-branch`.
@@ -47,6 +41,14 @@ npm install -g releasor
 * Create a new tag with configurable string. Default is `{{ version }}` without any prefixes.
 * Push new tag to remote, usually GitHub.
 * Publish module to NPM with `npm publish`.
+
+
+## Install
+
+```
+npm install -g releasor
+```
+
 
 ## Usage
 
@@ -81,11 +83,13 @@ Examples:
   releasor --no-release --bump major
 ```
 
+
 ## Alternatives
 
 * https://github.com/webpro/release-it
 * https://github.com/geddski/grunt-release
 * https://github.com/semantic-release/semantic-release
+
 
 ## License
 
