@@ -1,3 +1,4 @@
+var Promise = require('bluebird');
 var fs = require('fs');
 var _ = require('lodash');
 var utils = require('./utils.js');
@@ -44,7 +45,7 @@ function getTasks(opts) {
     });
 
     if (opts.dryRun) {
-        run = function noOp() {};
+        run = function noOp() { return Promise.resolve() };
     } else {
         run = utils.run;
     }
@@ -101,12 +102,18 @@ function npmPublish() {
     return run('npm publish');
 }
 
+// WARNING: This task does not care of dry-run switch
 function gitBranchName() {
-    return run('git rev-parse --abbrev-ref HEAD', {silent: true});
+    return utils.run('git rev-parse --abbrev-ref HEAD', {silent: true});
 }
 
+// WARNING: This task does not care of dry-run switch
 function gitCommitMessagesSinceTag(tag) {
-    var command = 'git log --pretty="format:%s" ' + tag + '..HEAD';
+    if (tag === null) {
+        tag = '';
+    }
+
+    var command = 'git log --pretty="format:%h %s" ' + tag + '..HEAD';
     return utils.run(command, {silent: true})
     .then(function(stdout) {
         var lines = stdout.split('\n').map(function(line) {
@@ -117,11 +124,41 @@ function gitCommitMessagesSinceTag(tag) {
     });
 }
 
+// Returns latest tag. If no tags are created, returns one of root commits
+// WARNING: This task does not care of dry-run switch
 function gitLatestTag() {
     var command = 'git describe --tags --abbrev=0';
     return utils.run(command, {silent: true})
     .then(function(stdout) {
+        if (!stdout) {
+            var err = new Error('Unexpected tag returned: ' + stdout);
+            err.recoverable = false;
+            throw err;
+        }
+
         return stdout.trim();
+    })
+    .catch(function(err) {
+        // Needs to be explicitly checked against false, because by default
+        // this field is undefined
+        if (!err.recoverable === false) {
+            throw err;
+        }
+
+        log('No tags found, trying to get one of root commits');
+        return _gitOneOfRootCommits();
+    });
+}
+
+// WARNING: This task does not care of dry-run switch
+function _gitOneOfRootCommits() {
+    return utils.run('git rev-list HEAD', {silent: true})
+    .then(function(stdout) {
+        if (!stdout) {
+            throw new Error('No commit history found.');
+        }
+
+        return _.last(stdout.trim().split('\n')).trim();
     });
 }
 

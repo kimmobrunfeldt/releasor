@@ -41,7 +41,8 @@ function getUserOpts() {
         type: 'string'
     })
     .option('dry-run', {
-        describe: 'When set, dry run is done. No commands are actually executed.',
+        describe: 'When set, dry run is done. No state changing commands are' +
+                  ' executed. Some commands, such as git log, are executed.',
         default: defaultOpts.dryRun,
         type: 'boolean'
     })

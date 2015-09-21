@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+var Promise = require('bluebird');
+Promise.longStackTraces();
 var fs = require('fs');
 var Mustache = require('mustache');
 var utils = require('./utils');
@@ -26,7 +28,7 @@ function main() {
 
     tasks.gitBranchName()
     .then(function(stdout) {
-        if (opts.verifyBranch && stdout.trim().toLowerCase() !== 'master') {
+        if (!opts.dryRun && opts.verifyBranch && stdout.trim().toLowerCase() !== 'master') {
             throw new Error('You should be in master branch before running the script!');
         }
 
@@ -50,27 +52,28 @@ function main() {
     .then(tasks.gitPush)
     .then(tasks.gitLatestTag)
     .then(function(latestTag) {
-        log('Commits since tag', latestTag + ':');
+        log('Commits since', latestTag + ':\n');
         return latestTag;
     })
-    .then(tasks.commitMessagesSinceTag)  // Takes tag as a parameter
+    .then(tasks.gitCommitMessagesSinceTag)  // Takes tag as a parameter
     .then(function(messagesList) {
-        console.log(formatList(messagesList, '*'));
+        console.log(prefixList(messagesList, '* '));
 
         console.log('');
         log('Release successfully done!');
     })
     .catch(function(err) {
         console.error('\nReleasing failed!');
-        console.trace(err);
+        console.error(err);
+        console.error(err.stack);
         process.exit(2);
     });
 }
 
-// formatList(['a', 'b'], '* ') ->
+// prefixList(['a', 'b'], '* ') ->
 // * a
 // * b
-function formatList(list, prefix) {
+function prefixList(list, prefix) {
     return prefix + list.join('\n' + prefix);
 }
 

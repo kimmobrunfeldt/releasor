@@ -1,3 +1,4 @@
+var Promise = require('bluebird');
 var shell = require('shelljs');
 
 var CONSOLE_PREFIX = '->';
