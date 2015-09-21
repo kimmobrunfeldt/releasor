@@ -13,10 +13,10 @@ var defaultOpts = {
     dryRun: false,
 
     // If true, don't push commits/tags or release to npm
-    noRelease: false,
+    release: true,
 
     // If true, don't verify that branch is master
-    noBranchVerify: false
+    verifyBranch: true
 };
 
 function getOpts() {
@@ -33,6 +33,8 @@ function getUserOpts() {
     .example('releasor --bump minor')
     .example('releasor --dry-run')
     .example('releasor --no-release --bump major')
+    .example('releasor --verify-branch false')
+    .example('releasor --no-verify-branch')
     .option('bump', {
         describe: 'Bump type. Valid values patch, minor, major',
         default: defaultOpts.bump,
@@ -43,17 +45,18 @@ function getUserOpts() {
         default: defaultOpts.dryRun,
         type: 'boolean'
     })
-    .option('no-release', {
-        describe: 'When set, only commands which modify local environment will be' +
+    .option('release', {
+        describe: 'When set to false, only commands which modify local environment will be' +
                   ' run. Nothing will be sent to remote environments' +
                   ' such as git or NPM. This can be used to test what the' +
-                  ' script does.',
-        default: defaultOpts.noRelease,
+                  ' script does. "--release false" is same as "--no-release"',
+        default: defaultOpts.release,
         type: 'boolean'
     })
-    .option('no-branch-verify', {
-        describe: 'When set, branch will be not verified to be master',
-        default: defaultOpts.noBranchVerify,
+    .option('verify-branch', {
+        describe: 'When set to false, branch will be not verified to be master' +
+                  ' "--verify-branch false" is same as "--no-verify-branch"',
+        default: defaultOpts.verifyBranch,
         type: 'boolean'
     })
     .option('m', {
@@ -77,7 +80,7 @@ function getUserOpts() {
     .version(require('../package.json').version)
     .argv;
 
-    return yargs;
+    return yargs.argv;
 }
 
 function validateOpts(opts) {

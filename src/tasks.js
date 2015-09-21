@@ -34,7 +34,7 @@ function getTasks(opts) {
 
     _.each(tasks, function(taskFunc, funcName) {
         var isLocalTask = _.contains(localTasks, funcName);
-        if (opts.noRelease && !isLocalTask) {
+        if (!opts.release && !isLocalTask) {
             safeTasks[funcName] = function() {
                 log('Skip', funcName, 'task');
             };

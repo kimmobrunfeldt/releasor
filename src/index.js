@@ -5,7 +5,7 @@ var Mustache = require('mustache');
 var utils = require('./utils');
 var log = utils.log;
 var cli = require('./cli');
-var getTasks = require('./tasks').getTasks;
+var getTasks = require('./tasks');
 
 function main() {
     // Ensure that we are the directory is a valid npm project
@@ -26,8 +26,7 @@ function main() {
 
     tasks.gitBranchName()
     .then(function(stdout) {
-        var verifyBranch = !opts.noBranchVerify;
-        if (verifyBranch && stdout.trim().toLowerCase() !== 'master') {
+        if (opts.verifyBranch && stdout.trim().toLowerCase() !== 'master') {
             throw new Error('You should be in master branch before running the script!');
         }
 
