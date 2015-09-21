@@ -3,7 +3,7 @@
 Command line tool to automate node module releasing to NPM and Git. And of course,
 `releasor` has been released with `releasor`. :stew: :dog2:
 
-**Don't \* **
+**Don't** \*
 
 ```bash
 *bump patch version*
@@ -24,7 +24,7 @@ releasor
 And you will get list of commits since last release conveniently to stdout.
 
 
-** \* ** [npm version](https://docs.npmjs.com/cli/version) actually automates most of
+\* [npm version](https://docs.npmjs.com/cli/version) actually automates most of
 the stuff, but releasor gives some more control to the automation. The point
 I'm trying to make is that you shouldn't do a release manually.
 
