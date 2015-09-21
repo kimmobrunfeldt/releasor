@@ -23,6 +23,7 @@ var localTasks = [
     'bumpVersion',
     'gitAdd',
     'gitCommit',
+    'gitTag',
     'gitBranchName',
     'gitCommitMessagesSinceTag',
     'gitLatestTag'
