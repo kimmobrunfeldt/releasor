@@ -38,6 +38,16 @@ I'm trying to make is that you shouldn't do a release manually.
 npm install -g releasor
 ```
 
+## What it does
+
+* Check that branch is `master` Can be disabled with `--no-verify-branch`.
+* Output commit messages since last release.
+* Bump version number in *package.json*.
+* Commit *package.json* to git with a configurable message. Default is `Release {{ version }}`.
+* Create a new tag with configurable string. Default is `{{ version }}` without any prefixes.
+* Push new tag to remote, usually GitHub.
+* Publish module to NPM with `npm publish`;
+
 ## Usage
 
 ```
