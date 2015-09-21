@@ -46,7 +46,7 @@ npm install -g releasor
 * Commit *package.json* to git with a configurable message. Default is `Release {{ version }}`.
 * Create a new tag with configurable string. Default is `{{ version }}` without any prefixes.
 * Push new tag to remote, usually GitHub.
-* Publish module to NPM with `npm publish`;
+* Publish module to NPM with `npm publish`.
 
 ## Usage
 
