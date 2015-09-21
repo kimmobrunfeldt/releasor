@@ -78,8 +78,10 @@ function printCommitMessagesSinceLastTag(tasks) {
         if (!_.isEmpty(messagesList)) {
             console.log(prefixList(messagesList, '* '));
         } else {
-            console.log('No commits found\n');
+            console.log('No commits found');
         }
+
+        console.log('');
     });
 }
 
