@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var _ = require('lodash');
 var Promise = require('bluebird');
 Promise.longStackTraces();
 var fs = require('fs');
@@ -32,6 +33,9 @@ function main() {
             throw new Error('You should be in master branch before running the script!');
         }
 
+        return printCommitMessagesSinceLastTag(tasks);
+    })
+    .then(function() {
         return tasks.bumpVersion(opts.bump);
     })
     .then(function(version) {
@@ -50,15 +54,7 @@ function main() {
     .then(tasks.gitPushTag)  // Takes tag as a parameter
     .then(tasks.npmPublish)
     .then(tasks.gitPush)
-    .then(tasks.gitLatestTag)
-    .then(function(latestTag) {
-        log('Commits since', latestTag + ':\n');
-        return latestTag;
-    })
-    .then(tasks.gitCommitMessagesSinceTag)  // Takes tag as a parameter
-    .then(function(messagesList) {
-        console.log(prefixList(messagesList, '* '));
-
+    .then(function() {
         console.log('');
         log('Release successfully done!');
     })
@@ -67,6 +63,23 @@ function main() {
         console.error(err);
         console.error(err.stack);
         process.exit(2);
+    });
+}
+
+function printCommitMessagesSinceLastTag(tasks) {
+    return tasks.gitLatestTag()
+    .then(function(latestTag) {
+        log('Commits since', latestTag + ':\n');
+
+        return latestTag;
+    })
+    .then(tasks.gitCommitMessagesSinceTag)
+    .then(function(messagesList) {
+        if (!_.isEmpty(messagesList)) {
+            console.log(prefixList(messagesList, '* '));
+        } else {
+            console.log('No commits found\n');
+        }
     });
 }
 

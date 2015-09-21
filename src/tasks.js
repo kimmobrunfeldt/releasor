@@ -110,14 +110,15 @@ function gitBranchName() {
 
 // WARNING: This task does not care of dry-run switch
 function gitCommitMessagesSinceTag(tag) {
-    if (tag === null) {
-        tag = '';
-    }
-
     var command = 'git log --pretty="format:%h %s" ' + tag + '..HEAD';
     return utils.run(command, {silent: true})
     .then(function(stdout) {
-        var lines = stdout.split('\n').map(function(line) {
+        var trimmed = stdout.trim();
+        if (!trimmed) {
+            return [];
+        }
+
+        var lines = trimmed.split('\n').map(function(line) {
             return line.trim();
         });
 
