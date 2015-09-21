@@ -1,7 +1,7 @@
 {
   "name": "releasor",
   "version": "0.0.1",
-  "description": "Automated releasing",
+  "description": "Command line tool to automate node module releasing to NPM and Git",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -10,7 +10,11 @@
   "keywords": [
     "npm",
     "release",
-    "releasor"
+    "releasor",
+    "automation",
+    "script",
+    "publish",
+    "automate"
   ],
   "author": "Kimmo Brunfeldt",
   "license": "MIT",
