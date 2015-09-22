@@ -3,7 +3,14 @@
 [![Build Status](https://travis-ci.org/kimmobrunfeldt/releasor.svg)](https://travis-ci.org/kimmobrunfeldt/releasor)
 
 Command line tool to automate node module releasing to NPM and Git. And of course,
-`releasor` has been released with `releasor`. :stew: :dog2:
+`releasor` has been released with `releasor`. :stew: :dog2: Releasor is used
+in
+[ProgressBar.js](https://github.com/kimmobrunfeldt/progressbar.js),
+[git-hours](https://github.com/kimmobrunfeldt/git-hours),
+[arr-mutations](https://www.npmjs.com/package/arr-mutations), and
+[many](https://www.npmjs.com/package/arr-xor)
+[others](https://www.npmjs.com/package/arr-and). It has proven itself in
+production releases.
 
 **Don't** \*
 
