@@ -66,31 +66,38 @@ npm install -g releasor
 Usage: releasor [options]
 
 Options:
-  --bump              Bump type. Valid values patch, minor, major
+  --bump             Bump type. Valid values patch, minor, major
                                                      [string] [default: "patch"]
-  --dry-run           When set, dry run is done. No commands are actually
-                      executed.                       [boolean] [default: false]
-  --no-release        When set, only commands which modify local environment
-                      will be run. Nothing will be sent to remote environments
-                      such as git or NPM. This can be used to test what the
-                      script does.                    [boolean] [default: false]
-  --no-branch-verify  When set, branch will be not verified to be master
+  --dry-run          When set, dry run is done. No state changing commands are
+                     executed. Some commands, such as git log, are executed.
                                                       [boolean] [default: false]
-  -m, --message       Message for the new release. Used in git commit.Default: "
-                      Release {{ version }}". {{ version }} will be replaced
-                      with the new version.
+  --release          When set to false, only commands which modify local
+                     environment will be run. Nothing will be sent to remote
+                     environments such as git or NPM. This can be used to test
+                     what the script does. "--release false" is same as "--no-
+                     release"                          [boolean] [default: true]
+  --verify-branch    When set to false, branch will be not verified to be master
+                     "--verify-branch false" is same as "--no-verify-branch"
+                                                       [boolean] [default: true]
+  -m, --message      Message for the new release. Used in git commit.Default: "
+                     Release {{ version }}". {{ version }} will be replaced with
+                     the new version.
                                      [string] [default: "Release {{ version }}"]
-  -t, --tag           Format for the new git tag. Default: "{{ version }}" {{
-                      version }} will be replaced with the new version.
+  -t, --tag          Format for the new git tag. Default: "{{ version }}" {{
+                     version }} will be replaced with the new version.
                                              [string] [default: "{{ version }}"]
-  -h, --help          Show help                                        [boolean]
-  -v, --version       Show version number                              [boolean]
+  --npm-user-config  Specify custom .npmrc to be used with npm commands.
+                     Optional.                                          [string]
+  -h, --help         Show help                                         [boolean]
+  -v, --version      Show version number                               [boolean]
 
 Examples:
   releasor
   releasor --bump minor
   releasor --dry-run
   releasor --no-release --bump major
+  releasor --verify-branch false
+  releasor --no-verify-branch
 ```
 
 
