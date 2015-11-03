@@ -98,9 +98,16 @@ function gitPushTag(tagName) {
     return run('git push origin ' + tagName);
 }
 
-function npmPublish() {
+function npmPublish(npmUserConfig) {
     log('Publish to npm');
-    return run('npm publish');
+    var command = 'npm';
+
+    if (npmUserConfig) {
+        command += ' --userconfig=' + npmUserConfig;
+    }
+    command += ' publish';
+
+    return run(command);
 }
 
 // WARNING: This task does not care of dry-run switch

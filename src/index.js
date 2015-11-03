@@ -52,7 +52,7 @@ function main() {
         return tasks.gitTag(tag);
     })
     .then(tasks.gitPushTag)  // Takes tag as a parameter
-    .then(tasks.npmPublish)
+    .then(tasks.npmPublish.bind(this, opts.npmUserConfig))
     .then(tasks.gitPush)
     .then(function() {
         console.log('');

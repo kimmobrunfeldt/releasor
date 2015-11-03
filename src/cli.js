@@ -75,6 +75,10 @@ function getUserOpts() {
         default: defaultOpts.tag,
         type: 'string'
     })
+    .option('npm-user-config', {
+        describe: 'Specify custom .npmrc to be used with npm commands. Optional.',
+        type: 'string'
+    })
     .help('h')
     .alias('h', 'help')
     .alias('v', 'version')
