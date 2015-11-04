@@ -64,7 +64,8 @@ function getUserOpts() {
         alias: 'message',
         describe: 'Message for the new release. Used in git commit.' +
                   'Default: "Release {{ version }}".' +
-                  ' {{ version }} will be replaced with the new version.',
+                  ' {{ version }} will be replaced with the new version.' +
+                  ' {{ directory }} is also available.',
         default: defaultOpts.message,
         type: 'string'
     })
@@ -78,6 +79,17 @@ function getUserOpts() {
     .option('npm-user-config', {
         describe: 'Specify custom .npmrc to be used with npm commands. Optional.',
         type: 'string'
+    })
+    .option('directory', {
+        describe: 'Specify a directory where the node module to be released is' +
+                  ' located. Default: current directory',
+        type: 'string'
+    })
+    .option('tag', {
+        describe: 'Tag format. Default: "{{ version }}".' +
+                  ' {{ directory }} is also available.',
+        type: 'string',
+        default: defaultOpts.tag,
     })
     .help('h')
     .alias('h', 'help')

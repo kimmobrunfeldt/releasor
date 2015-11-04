@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+var path = require('path');
+var fs = require('fs');
 var _ = require('lodash');
 var Promise = require('bluebird');
 Promise.longStackTraces();
-var fs = require('fs');
 var Mustache = require('mustache');
 var utils = require('./utils');
 var log = utils.log;
@@ -22,6 +23,18 @@ function main() {
 
     if (opts.dryRun) {
         log('Dry run\n');
+    }
+
+    if (opts.directory) {
+        try {
+            process.chdir(opts.directory);
+            opts.directory = path.basename(opts.directory);
+        } catch (e) {
+            console.error('Could not find directory', opts.directory);
+            process.exit(1);
+        }
+    } else {
+        opts.directory = path.basename(process.cwd());
     }
 
     // Will be set later
@@ -44,11 +57,17 @@ function main() {
         return tasks.gitAdd(['package.json']);
     })
     .then(function() {
-        var message = Mustache.render(opts.message, {version: newVersion});
+        var message = Mustache.render(opts.message, {
+            version: newVersion,
+            directory: opts.directory
+        });
         return tasks.gitCommit(message);
     })
     .then(function() {
-        var tag = Mustache.render(opts.tag, {version: newVersion});
+        var tag = Mustache.render(opts.tag, {
+            version: newVersion,
+            directory: opts.directory
+        });
         return tasks.gitTag(tag);
     })
     .then(tasks.gitPushTag)  // Takes tag as a parameter
@@ -69,7 +88,7 @@ function main() {
 function printCommitMessagesSinceLastTag(tasks) {
     return tasks.gitLatestTag()
     .then(function(latestTag) {
-        log('Commits since', latestTag + ':\n');
+        log('Commits since latest tag', latestTag + ':\n');
 
         return latestTag;
     })
