@@ -37,6 +37,13 @@ function main() {
         opts.directory = path.basename(process.cwd());
     }
 
+    var privateModule = JSON.parse(fs.readFileSync('./package.json')).private;
+    if (privateModule) {
+        console.error('Not releasing module which defines "private": true in package.json.');
+        console.error('Release stopped.');
+        process.exit(2);
+    }
+
     // Will be set later
     var newVersion;
 
