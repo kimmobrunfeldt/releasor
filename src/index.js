@@ -25,6 +25,11 @@ function main() {
         log('Dry run\n');
     }
 
+    if (opts.npmUserConfig) {
+        // Modify path to absolute path
+        opts.npmUserConfig = path.resolve(opts.npmUserConfig);
+    }
+
     if (opts.directory) {
         try {
             process.chdir(opts.directory);
