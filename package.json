@@ -1,6 +1,6 @@
 {
   "name": "releasor",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Command line tool to automate node module releasing to NPM and Git",
   "main": "./src/index.js",
   "bin": {
