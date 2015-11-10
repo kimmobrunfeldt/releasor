@@ -25,7 +25,6 @@ function main() {
         }
     }
 
-
     // Import repository configuration if it exists
     var fileOpts = {};
     var statsConfiguration;
