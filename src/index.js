@@ -5,13 +5,15 @@ var fs = require('fs');
 var _ = require('lodash');
 var Promise = require('bluebird');
 Promise.longStackTraces();
-var Mustache = require('mustache');
 var utils = require('./utils');
 var log = utils.log;
 var cli = require('./cli');
 var getTasks = require('./tasks');
 
 function main() {
+    // Configure _.template to match Mustache template delimiters
+    _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+
     // Ensure that we are the directory is a valid npm project
     var stats = fs.statSync('./package.json');
     if (!stats.isFile()) {
@@ -69,14 +71,14 @@ function main() {
         return tasks.gitAdd(['package.json']);
     })
     .then(function() {
-        var message = Mustache.render(opts.message, {
+        var message = _.template(opts.message)({
             version: newVersion,
             directory: opts.directory
         });
         return tasks.gitCommit(message);
     })
     .then(function() {
-        var tag = Mustache.render(opts.tag, {
+        var tag = _.template(opts.tag)({
             version: newVersion,
             directory: opts.directory
         });
