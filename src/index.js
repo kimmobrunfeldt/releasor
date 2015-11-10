@@ -16,7 +16,7 @@ function main() {
     try {
         var stats = fs.statSync('./package.json');
     }
-    catch(e) {
+    catch (e) {
         throw new Error('Unable to locate ./package.json!');
     }
     finally {
@@ -32,7 +32,7 @@ function main() {
     try {
         var statsConfiguration = fs.statSync('./.releasorrc');
     }
-    catch(e) {}
+    catch (e) {}
     finally {
         if (statsConfiguration && statsConfiguration.isFile()) {
             fileOpts = JSON.parse(fs.readFileSync('./.releasorrc'));
