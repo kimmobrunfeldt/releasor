@@ -13,12 +13,32 @@ var getTasks = require('./tasks');
 
 function main() {
     // Ensure that we are the directory is a valid npm project
-    var stats = fs.statSync('./package.json');
-    if (!stats.isFile()) {
+    try {
+        var stats = fs.statSync('./package.json');
+    }
+    catch (e) {
         throw new Error('Unable to locate ./package.json!');
     }
+    finally {
+        if (!stats.isFile()) {
+            throw new Error('Unable to locate ./package.json!');
+        }
+    }
 
-    var opts = cli.getOpts();
+    // Import repository configuration if it exists
+    var fileOpts = {};
+    var statsConfiguration;
+    try {
+        var statsConfiguration = fs.statSync('./.releasorrc');
+    }
+    catch (e) {}
+    finally {
+        if (statsConfiguration && statsConfiguration.isFile()) {
+            fileOpts = JSON.parse(fs.readFileSync('./.releasorrc'));
+        }
+    }
+
+    var opts = _.assign(fileOpts, cli.getOpts());
     var tasks = getTasks(opts);
 
     if (opts.dryRun) {
