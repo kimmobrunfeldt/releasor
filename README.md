@@ -18,10 +18,10 @@ production releases.
 *bump patch version*
 git add package.json
 git commit -m "Release *version*"
-git push
 git tag *version*
-git push origin *tag*
 npm publish
+git push origin *tag*
+git push
 ```
 
 **Do**
@@ -48,8 +48,9 @@ I'm trying to make is that you shouldn't do a release manually.
 * Bump version number in *package.json*.
 * Commit *package.json* to git with a configurable message. Default is `Release {{ version }}`.
 * Create a new tag with configurable string. Default is `{{ version }}` without any prefixes.
-* Push new tag to remote, usually GitHub.
 * Publish module to NPM with `npm publish`.
+* Push new tag to remote, usually GitHub.
+* Push commits to remote, usually GitHub.
 
 ![](docs/releasor.gif)
 
@@ -100,6 +101,14 @@ Examples:
   releasor --no-verify-branch
 ```
 
+## Handling errors
+
+If an error occurs during the release process, you have to resolve it manually.
+You might need to do some git operation such as:
+
+* Revert a commit
+* Remove local and remote tag
+* etc ..
 
 ## Alternatives
 

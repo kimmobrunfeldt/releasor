@@ -117,8 +117,13 @@ function main() {
         });
         return tasks.gitTag(tag);
     })
+    .then(function(tag) {
+        return tasks.npmPublish.bind(this, opts.npmUserConfig)
+        .then(function() {
+            return tag;
+        });
+    })
     .then(tasks.gitPushTag)  // Takes tag as a parameter
-    .then(tasks.npmPublish.bind(this, opts.npmUserConfig))
     .then(tasks.gitPush)
     .then(function() {
         console.log('');
