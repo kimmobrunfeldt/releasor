@@ -65,7 +65,7 @@ function main() {
     var privateModule = JSON.parse(fs.readFileSync('./package.json')).private;
     if (privateModule) {
         console.error('Not releasing module which defines "private": true in package.json.');
-        console.error('Release stopped.');
+        console.error('Release aborted.');
         process.exit(2);
     }
 
@@ -76,6 +76,21 @@ function main() {
     .then(function(stdout) {
         if (!opts.dryRun && opts.verifyBranch && stdout.trim().toLowerCase() !== 'master') {
             throw new Error('You should be in master branch before running the script!');
+        }
+
+        if (opts.verifyNpmAccess) {
+            return tasks.npmHasPublishAccess(opts.npmUserConfig);
+        }
+    })
+    .then(function(result) {
+        if (result && !result.hasAccess) {
+            console.error('You don\'t have publish access to the npm module!');
+            console.error('Currently logged in npm user:');
+            console.error('  - ' + result.username);
+            console.error('Users who have publish access:');
+            console.error('  - ' + result.owners.join('\n  - '));
+            console.error('\nRelease aborted.')
+            process.exit(3);
         }
 
         return printCommitMessagesSinceLastTag(tasks);

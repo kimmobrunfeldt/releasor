@@ -15,8 +15,11 @@ var defaultOpts = {
     // If true, don't push commits/tags or release to npm
     release: true,
 
-    // If true, don't verify that branch is master
-    verifyBranch: true
+    // If true, verify that branch is master
+    verifyBranch: true,
+
+    // If true, verify that currently logged in npm user can publish the module
+    verifyNpmAccess: true
 };
 
 function getOpts() {
@@ -58,6 +61,12 @@ function getUserOpts() {
         describe: 'When set to false, branch will be not verified to be master' +
                   ' "--verify-branch false" is same as "--no-verify-branch"',
         default: defaultOpts.verifyBranch,
+        type: 'boolean'
+    })
+    .option('verify-npm-access', {
+        describe: 'When set to false, npm publish access will be not verified' +
+                  ' "--verify-npm-access false" is same as "--no-verify-npm-access"',
+        default: defaultOpts.verifyNpmAccess,
         type: 'boolean'
     })
     .option('m', {

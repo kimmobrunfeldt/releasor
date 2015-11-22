@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var fs = require('fs');
 var _ = require('lodash');
+var splitLines = require('split-lines');
 var utils = require('./utils.js');
 var log = utils.log;
 
@@ -11,6 +12,7 @@ var tasks = {
     gitTag: gitTag,
     gitPush: gitPush,
     gitPushTag: gitPushTag,
+    npmHasPublishAccess: npmHasPublishAccess,
     npmPublish: npmPublish,
     gitBranchName: gitBranchName,
     gitCommitMessagesSinceTag: gitCommitMessagesSinceTag,
@@ -26,7 +28,8 @@ var localTasks = [
     'gitTag',
     'gitBranchName',
     'gitCommitMessagesSinceTag',
-    'gitLatestTag'
+    'gitLatestTag',
+    'npmHasPublishAccess'
 ];
 
 // Make sure that run is not exeuted when dry-run switch is set.
@@ -108,6 +111,60 @@ function npmPublish(npmUserConfig) {
     command += ' publish';
 
     return run(command);
+}
+
+function npmHasPublishAccess(npmUserConfig) {
+    return npmWhoami(npmUserConfig)
+    .then(function(username) {
+        return Promise.props({
+            username: username,
+            owners: npmGetOwners(npmUserConfig)
+        });
+    })
+    .then(function(props) {
+        return {
+            hasAccess: _.contains(props.owners, props.username),
+            username: props.username,
+            owners: props.owners
+        };
+    });
+}
+
+// WARNING: This task does not care of dry-run switch
+function npmWhoami(npmUserConfig) {
+    var command = 'npm';
+
+    if (npmUserConfig) {
+        command += ' --userconfig=' + npmUserConfig;
+    }
+    command += ' whoami';
+
+    return run(command, {silent: true})
+    .then(function(stdout) {
+        return stdout.trim();
+    });
+}
+
+// WARNING: This task does not care of dry-run switch
+function npmGetOwners(npmUserConfig) {
+    var command = 'npm';
+
+    if (npmUserConfig) {
+        command += ' --userconfig=' + npmUserConfig;
+    }
+    command += ' owner ls';
+
+    return run(command, {silent: true})
+    .then(function convertStdoutToListOfOwners(stdout) {
+        var lines = splitLines(stdout);
+        var nonEmptyLines = _.filter(lines, function(line) {
+            return !_.isEmpty(line);
+        });
+
+        return _.map(nonEmptyLines, function(line) {
+            return line.split(' ')[0];
+        });
+    });
 }
 
 // WARNING: This task does not care of dry-run switch
