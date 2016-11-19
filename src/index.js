@@ -20,7 +20,7 @@ function main() {
         throw new Error('Unable to locate ./package.json!');
     }
     finally {
-        if (!stats.isFile()) {
+        if (!stats || !stats.isFile()) {
             throw new Error('Unable to locate ./package.json!');
         }
     }
