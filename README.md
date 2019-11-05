@@ -1,3 +1,5 @@
+*Archived and unmaintained. I recommend using https://github.com/sindresorhus/np instead*
+
 # Releasor
 
 [![Build Status](https://travis-ci.org/kimmobrunfeldt/releasor.svg)](https://travis-ci.org/kimmobrunfeldt/releasor)
