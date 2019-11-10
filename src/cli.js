@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var yargs = require('yargs');
 
-// Message templates use https://github.com/janl/mustache.js
+// Message templates use Lodash.template with Mustache syntax
 var defaultOpts = {
     message: 'Release {{ version }}',
     tag: '{{ version }}',
